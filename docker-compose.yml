@@ -1,0 +1,92 @@
+# docker-compose.yml
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: blue-escape-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: blue_escape_db
+      MYSQL_USER: blue_escape_user
+      MYSQL_PASSWORD: blue_escape_password
+    command: --host-cache-size=0
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./scripts/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro,Z
+    networks:
+      - blue-escape-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 40s
+
+  # NestJS Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blue-escape-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: blue_escape_user
+      DB_PASSWORD: blue_escape_password
+      DB_DATABASE: blue_escape_db
+      JWT_SECRET: your_jwt_secret_for_docker
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot reload in development
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - blue-escape-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      timeout: 10s
+      retries: 5
+      interval: 30s
+      start_period: 60s
+
+  # phpMyAdmin for database management (optional)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: blue-escape-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: blue_escape_user
+      PMA_PASSWORD: blue_escape_password
+      MYSQL_ROOT_PASSWORD: root_password
+      APACHE_SERVER_NAME: localhost
+    ports:
+      - "8080:80"
+    networks:
+      - blue-escape-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - tools
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  blue-escape-network:
+    driver: bridge

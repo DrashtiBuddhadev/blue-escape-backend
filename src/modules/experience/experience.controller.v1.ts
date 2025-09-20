@@ -1,0 +1,60 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
+import { ExperienceService } from './experience.service';
+import { CreateExperienceDto } from './dto/create-experience.dto';
+import { UpdateExperienceDto } from './dto/update-experience.dto';
+
+@Controller({ path: 'experiences', version: '1' })
+export class ExperienceController {
+  constructor(private readonly experienceService: ExperienceService) {}
+
+  @Post()
+  create(@Body() createExperienceDto: CreateExperienceDto) {
+    return this.experienceService.create(createExperienceDto);
+  }
+
+  @Get()
+  findAll(
+    @Query('region') region?: string,
+    @Query('country') country?: string,
+    @Query('city') city?: string,
+    @Query('tag') tag?: string,
+  ) {
+    if (region) {
+      return this.experienceService.findByRegion(region);
+    }
+    if (country) {
+      return this.experienceService.findByCountry(country);
+    }
+    if (city) {
+      return this.experienceService.findByCity(city);
+    }
+    if (tag) {
+      return this.experienceService.findByTag(tag);
+    }
+    return this.experienceService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.experienceService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateExperienceDto: UpdateExperienceDto) {
+    return this.experienceService.update(id, updateExperienceDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.experienceService.remove(id);
+  }
+}
