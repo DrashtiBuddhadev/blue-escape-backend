@@ -1,11 +1,9 @@
-import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateCollectionDto {
+export class CreateCollectionRequestModel {
   @ApiProperty({
     description: 'Collection name',
     example: 'Southeast Asia Adventures'
   })
-  @IsString()
   name: string;
 }

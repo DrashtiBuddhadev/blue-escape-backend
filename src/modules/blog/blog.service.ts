@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Blog } from '../../entities/blog.entity';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
+import { CreateBlogRequestModel } from './model/create-blog-request.model';
+import { UpdateBlogRequestModel } from './model/update-blog-request.model';
 import { LoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
@@ -14,10 +16,31 @@ export class BlogService {
     private readonly logger: LoggerService,
   ) {}
 
-  async create(createBlogDto: CreateBlogDto): Promise<Blog> {
+  async create(createBlogRequest: CreateBlogRequestModel): Promise<Blog> {
     const startTime = Date.now();
     try {
-      this.logger.info('Creating new blog', 'BlogService', { title: createBlogDto.title });
+      this.logger.info('Creating new blog', 'BlogService', { title: createBlogRequest.title });
+
+      const createBlogDto: CreateBlogDto = {
+        title: createBlogRequest.title,
+        featured_media: createBlogRequest.featured_media,
+        hero_media: createBlogRequest.hero_media,
+        tags: createBlogRequest.tags,
+        excerpt: createBlogRequest.excerpt,
+        content: createBlogRequest.content?.map(c => ({
+          title: c.title,
+          content: c.content
+        })) || [],
+        region: createBlogRequest.region,
+        country: createBlogRequest.country,
+        city: createBlogRequest.city,
+        author_name: createBlogRequest.author_name,
+        about_author: createBlogRequest.about_author,
+        read_time: createBlogRequest.read_time,
+        active: createBlogRequest.active,
+        published_at: createBlogRequest.published_at
+      };
+
       const blog = this.blogRepository.create(createBlogDto);
       const result = await this.blogRepository.save(blog);
       this.logger.logServiceCall('BlogService', 'create', Date.now() - startTime, true, { blogId: result.id });
@@ -68,8 +91,29 @@ export class BlogService {
     }
   }
 
-  async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
+  async update(id: string, updateBlogRequest: UpdateBlogRequestModel): Promise<Blog> {
     const blog = await this.findOne(id);
+
+    const updateBlogDto: UpdateBlogDto = {
+      title: updateBlogRequest.title,
+      featured_media: updateBlogRequest.featured_media,
+      hero_media: updateBlogRequest.hero_media,
+      tags: updateBlogRequest.tags,
+      excerpt: updateBlogRequest.excerpt,
+      content: updateBlogRequest.content?.map(c => ({
+        title: c.title,
+        content: c.content
+      })),
+      region: updateBlogRequest.region,
+      country: updateBlogRequest.country,
+      city: updateBlogRequest.city,
+      author_name: updateBlogRequest.author_name,
+      about_author: updateBlogRequest.about_author,
+      read_time: updateBlogRequest.read_time,
+      active: updateBlogRequest.active,
+      published_at: updateBlogRequest.published_at
+    };
+
     Object.assign(blog, updateBlogDto);
     return await this.blogRepository.save(blog);
   }
