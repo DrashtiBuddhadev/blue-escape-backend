@@ -1,46 +1,19 @@
-import {
-  IsString,
-  IsOptional,
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsDateString,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { BlogContentModel } from './blog-content.model';
 
-class BlogContentDto {
-  @ApiProperty({
-    description: 'Content section title',
-    example: 'Introduction'
-  })
-  @IsString()
-  title: string;
-
-  @ApiProperty({
-    description: 'Content section body',
-    example: 'This is the content of the blog section...'
-  })
-  @IsString()
-  content: string;
-}
-
-export class CreateBlogDto {
+export class UpdateBlogRequestModel {
   @ApiProperty({
     description: 'Blog title',
-    example: 'My Amazing Travel Blog'
+    example: 'My Amazing Travel Blog',
+    required: false
   })
-  @IsString()
-  title: string;
+  title?: string;
 
   @ApiProperty({
     description: 'Featured media URL or path',
     example: 'https://example.com/image.jpg',
     required: false
   })
-  @IsOptional()
-  @IsString()
   featured_media?: string;
 
   @ApiProperty({
@@ -48,8 +21,6 @@ export class CreateBlogDto {
     example: 'https://example.com/hero.jpg',
     required: false
   })
-  @IsOptional()
-  @IsString()
   hero_media?: string;
 
   @ApiProperty({
@@ -58,9 +29,6 @@ export class CreateBlogDto {
     required: false,
     type: [String]
   })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
   tags?: string[];
 
   @ApiProperty({
@@ -68,30 +36,20 @@ export class CreateBlogDto {
     example: 'A brief summary of this amazing travel experience...',
     required: false
   })
-  @IsOptional()
-  @IsString()
   excerpt?: string;
 
   @ApiProperty({
     description: 'Blog content sections',
-    type: [BlogContentDto],
-    example: [{
-      title: 'Introduction',
-      content: 'Welcome to my travel blog...'
-    }]
+    type: [BlogContentModel],
+    required: false
   })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => BlogContentDto)
-  content: BlogContentDto[];
+  content?: BlogContentModel[];
 
   @ApiProperty({
     description: 'Geographic region',
     example: 'Asia',
     required: false
   })
-  @IsOptional()
-  @IsString()
   region?: string;
 
   @ApiProperty({
@@ -99,8 +57,6 @@ export class CreateBlogDto {
     example: 'Thailand',
     required: false
   })
-  @IsOptional()
-  @IsString()
   country?: string;
 
   @ApiProperty({
@@ -108,8 +64,6 @@ export class CreateBlogDto {
     example: 'Bangkok',
     required: false
   })
-  @IsOptional()
-  @IsString()
   city?: string;
 
   @ApiProperty({
@@ -117,8 +71,6 @@ export class CreateBlogDto {
     example: 'John Doe',
     required: false
   })
-  @IsOptional()
-  @IsString()
   author_name?: string;
 
   @ApiProperty({
@@ -126,8 +78,6 @@ export class CreateBlogDto {
     example: 'Travel enthusiast and photographer',
     required: false
   })
-  @IsOptional()
-  @IsString()
   about_author?: string;
 
   @ApiProperty({
@@ -135,18 +85,13 @@ export class CreateBlogDto {
     example: '5 min read',
     required: false
   })
-  @IsOptional()
-  @IsString()
   read_time?: string;
 
   @ApiProperty({
     description: 'Whether the blog is active/published',
     example: true,
-    required: false,
-    default: true
+    required: false
   })
-  @IsOptional()
-  @IsBoolean()
   active?: boolean;
 
   @ApiProperty({
@@ -154,7 +99,5 @@ export class CreateBlogDto {
     example: '2024-01-15T10:00:00Z',
     required: false
   })
-  @IsOptional()
-  @IsDateString()
   published_at?: Date;
 }

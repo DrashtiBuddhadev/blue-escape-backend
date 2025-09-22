@@ -1,66 +1,19 @@
-import {
-  IsString,
-  IsOptional,
-  IsArray,
-  ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { ExperienceContentModel } from './experience-content.model';
+import { BestTimeModel } from './best-time.model';
+import { GalleryItemModel } from './gallery-item.model';
 
-class ExperienceContentDto {
+export class ExperienceResponseModel {
   @ApiProperty({
-    description: 'Content section title',
-    example: 'Activities'
+    description: 'Experience ID',
+    example: '123e4567-e89b-12d3-a456-426614174000'
   })
-  @IsString()
-  title: string;
+  id: string;
 
-  @ApiProperty({
-    description: 'Content section body',
-    example: 'Enjoy various outdoor activities like hiking and swimming'
-  })
-  @IsString()
-  content: string;
-}
-
-class BestTimeDto {
-  @ApiProperty({
-    description: 'Best time start',
-    example: 'November'
-  })
-  @IsString()
-  from: string;
-
-  @ApiProperty({
-    description: 'Best time end',
-    example: 'March'
-  })
-  @IsString()
-  to: string;
-}
-
-class GalleryItemDto {
-  @ApiProperty({
-    description: 'Gallery item name',
-    example: 'Sunset View'
-  })
-  @IsString()
-  name: string;
-
-  @ApiProperty({
-    description: 'Gallery item image URL',
-    example: 'https://example.com/sunset.jpg'
-  })
-  @IsString()
-  image: string;
-}
-
-export class CreateExperienceDto {
   @ApiProperty({
     description: 'Experience title',
     example: 'Island Hopping in Phi Phi'
   })
-  @IsString()
   title: string;
 
   @ApiProperty({
@@ -68,8 +21,6 @@ export class CreateExperienceDto {
     example: 'https://example.com/featured.jpg',
     required: false
   })
-  @IsOptional()
-  @IsString()
   featured_media?: string;
 
   @ApiProperty({
@@ -77,8 +28,6 @@ export class CreateExperienceDto {
     example: 'Discover the pristine beauty of Phi Phi Islands',
     required: false
   })
-  @IsOptional()
-  @IsString()
   excerpt?: string;
 
   @ApiProperty({
@@ -86,8 +35,6 @@ export class CreateExperienceDto {
     example: 'Thailand',
     required: false
   })
-  @IsOptional()
-  @IsString()
   country?: string;
 
   @ApiProperty({
@@ -95,8 +42,6 @@ export class CreateExperienceDto {
     example: 'Krabi',
     required: false
   })
-  @IsOptional()
-  @IsString()
   city?: string;
 
   @ApiProperty({
@@ -104,28 +49,20 @@ export class CreateExperienceDto {
     example: 'Asia',
     required: false
   })
-  @IsOptional()
-  @IsString()
   region?: string;
 
   @ApiProperty({
     description: 'Best time to visit',
-    type: [BestTimeDto],
+    type: [BestTimeModel],
     required: false
   })
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => BestTimeDto)
-  best_time?: BestTimeDto[];
+  best_time?: BestTimeModel[];
 
   @ApiProperty({
     description: 'Carousel media URL',
     example: 'https://example.com/carousel.jpg',
     required: false
   })
-  @IsOptional()
-  @IsString()
   carousel_media?: string;
 
   @ApiProperty({
@@ -133,20 +70,14 @@ export class CreateExperienceDto {
     example: 'A magical journey through crystal clear waters',
     required: false
   })
-  @IsOptional()
-  @IsString()
   brief_description?: string;
 
   @ApiProperty({
     description: 'Experience content sections',
-    type: [ExperienceContentDto],
+    type: [ExperienceContentModel],
     required: false
   })
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ExperienceContentDto)
-  content?: ExperienceContentDto[];
+  content?: ExperienceContentModel[];
 
   @ApiProperty({
     description: 'Experience tags',
@@ -154,28 +85,31 @@ export class CreateExperienceDto {
     required: false,
     type: [String]
   })
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
   tags?: string[];
 
   @ApiProperty({
     description: 'Experience gallery',
-    type: [GalleryItemDto],
+    type: [GalleryItemModel],
     required: false
   })
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => GalleryItemDto)
-  gallery?: GalleryItemDto[];
+  gallery?: GalleryItemModel[];
 
   @ApiProperty({
     description: 'Experience story',
     example: 'An unforgettable adventure that will change your perspective...',
     required: false
   })
-  @IsOptional()
-  @IsString()
   story?: string;
+
+  @ApiProperty({
+    description: 'Creation timestamp',
+    example: '2024-01-15T10:00:00Z'
+  })
+  created_at: Date;
+
+  @ApiProperty({
+    description: 'Last update timestamp',
+    example: '2024-01-15T10:00:00Z'
+  })
+  updated_at: Date;
 }
