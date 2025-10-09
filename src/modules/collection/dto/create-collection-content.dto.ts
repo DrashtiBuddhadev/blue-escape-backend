@@ -5,9 +5,20 @@ import {
   IsBoolean,
   ValidateNested,
   IsUUID,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+
+class FeatureImagesDto {
+  @ApiProperty({
+    description: 'Media URL',
+    example: ['https://example.com/beach.jpg', 'https://example.com/beach2.jpg']
+  })
+  @IsArray()
+  @IsString({ each: true })
+  media: string[];
+}
 
 class FeatureDto {
   @ApiProperty({
@@ -26,27 +37,20 @@ class FeatureDto {
 
   @ApiProperty({
     description: 'Feature images',
-    example: { media: 'https://example.com/beach.jpg' }
+    example: { media: ['https://example.com/beach.jpg', 'https://example.com/beach2.jpg'] }
   })
   @ValidateNested()
-  @Type(() => Object)
-  images: { media: string };
+  @Type(() => FeatureImagesDto)
+  images: FeatureImagesDto;
 }
 
 class AboutDestinationDto {
   @ApiProperty({
-    description: 'About destination title',
-    example: 'History'
+    description: 'About destination description',
+    example: 'Bhutan is a global pioneer. The first nation of the world to measure its success not by the strength of its economy but by the happiness of its people.'
   })
   @IsString()
-  title: string;
-
-  @ApiProperty({
-    description: 'About destination content',
-    example: 'Rich cultural heritage spanning centuries...'
-  })
-  @IsString()
-  content: string;
+  description: string;
 }
 
 export class CreateCollectionContentDto {
@@ -65,6 +69,15 @@ export class CreateCollectionContentDto {
   @IsOptional()
   @IsString()
   hero_media?: string;
+
+  @ApiProperty({
+    description: 'Featured image URL',
+    example: 'https://example.com/featured.jpg',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  featured_img?: string;
 
   @ApiProperty({
     description: 'About collection description',
@@ -87,15 +100,14 @@ export class CreateCollectionContentDto {
   features?: FeatureDto[];
 
   @ApiProperty({
-    description: 'About destination sections',
-    type: [AboutDestinationDto],
+    description: 'About destination information',
+    type: AboutDestinationDto,
     required: false
   })
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => AboutDestinationDto)
-  about_destination?: AboutDestinationDto[];
+  about_destination?: AboutDestinationDto;
 
   @ApiProperty({
     description: 'Geographic region',
@@ -123,6 +135,25 @@ export class CreateCollectionContentDto {
   @IsOptional()
   @IsString()
   city?: string;
+
+  @ApiProperty({
+    description: 'Property name',
+    example: 'Amankora',
+    required: false
+  })
+  @IsOptional()
+  @IsString()
+  property_name?: string;
+
+  @ApiProperty({
+    description: 'Tags for the collection',
+    example: ['adventure', 'travel'],
+    required: false
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
 
   @ApiProperty({
     description: 'Whether the collection content is active',

@@ -19,11 +19,12 @@ export class UpdateExperienceRequestModel {
   featured_media?: string;
 
   @ApiProperty({
-    description: 'Experience excerpt',
-    example: 'Discover the pristine beauty of Phi Phi Islands',
-    required: false
+    description: 'Experience taglines',
+    example: ['Discover the pristine beauty of Phi Phi Islands', 'An unforgettable island adventure'],
+    required: false,
+    type: [String]
   })
-  excerpt?: string;
+  taglines?: string[];
 
   @ApiProperty({
     description: 'Country',
@@ -54,11 +55,12 @@ export class UpdateExperienceRequestModel {
   best_time?: BestTimeModel[];
 
   @ApiProperty({
-    description: 'Carousel media URL',
-    example: 'https://example.com/carousel.jpg',
-    required: false
+    description: 'Carousel media URLs',
+    example: ['https://example.com/carousel1.jpg', 'https://example.com/carousel2.jpg'],
+    required: false,
+    type: [String]
   })
-  carousel_media?: string;
+  carousel_media?: string[];
 
   @ApiProperty({
     description: 'Brief description of the experience',
@@ -95,4 +97,25 @@ export class UpdateExperienceRequestModel {
     required: false
   })
   story?: string;
+
+  @ApiProperty({
+    description: 'Experience duration in days',
+    example: 3,
+    required: false
+  })
+  duration?: number;
+
+  @ApiProperty({
+    description: 'Experience price in INR',
+    example: 24999,
+    required: false
+  })
+  price?: number;
+
+  @ApiProperty({
+    description: 'Whether the experience is active/published',
+    example: true,
+    required: false
+  })
+  active?: boolean;
 }

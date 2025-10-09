@@ -23,6 +23,13 @@ export class CollectionContentResponseModel {
   hero_media?: string;
 
   @ApiProperty({
+    description: 'Featured image URL',
+    example: 'https://example.com/featured.jpg',
+    required: false
+  })
+  featured_img?: string;
+
+  @ApiProperty({
     description: 'About collection description',
     example: 'A curated collection of the best destinations in Southeast Asia',
     required: false
@@ -63,6 +70,20 @@ export class CollectionContentResponseModel {
     required: false
   })
   city?: string;
+
+  @ApiProperty({
+    description: 'Property name',
+    example: 'Amankora',
+    required: false
+  })
+  property_name?: string;
+
+  @ApiProperty({
+    description: 'Tags for the collection',
+    example: ['adventure', 'travel'],
+    required: false
+  })
+  tags?: string[];
 
   @ApiProperty({
     description: 'Whether the collection content is active',

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -14,8 +15,10 @@ import {
   ApiResponse,
   ApiParam,
   ApiQuery,
-  ApiBody
+  ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -29,15 +32,18 @@ export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
   @ApiOperation({ summary: 'Create a new blog post' })
-  @ApiBody({ type: CreateBlogRequestModel })
+  @ApiBearerAuth()
+  @ApiBody({ type: CreateBlogDto })
   @ApiResponse({
     status: 201,
     description: 'Blog post created successfully',
     type: BlogResponseModel
   })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createBlogRequest: CreateBlogRequestModel) {
+  create(@Body() createBlogRequest: CreateBlogDto) {
     return this.blogService.create(createBlogRequest);
   }
 
@@ -78,6 +84,7 @@ export class BlogController {
   }
 
   @ApiOperation({ summary: 'Update a blog post' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Blog post ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiBody({ type: UpdateBlogRequestModel })
   @ApiResponse({
@@ -87,15 +94,20 @@ export class BlogController {
   })
   @ApiResponse({ status: 404, description: 'Blog post not found' })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogRequest: UpdateBlogRequestModel) {
-    return this.blogService.update(id, updateBlogRequest);
+  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
+    return this.blogService.update(id, updateBlogDto);
   }
 
   @ApiOperation({ summary: 'Delete a blog post' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Blog post ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiResponse({ status: 200, description: 'Blog post deleted successfully' })
   @ApiResponse({ status: 404, description: 'Blog post not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.blogService.remove(id);

@@ -31,6 +31,14 @@ export class CreateBlogRequestModel {
   tags?: string[];
 
   @ApiProperty({
+    description: 'Blog taglines',
+    example: ['Explore the world', 'Adventure awaits'],
+    required: false,
+    type: [String]
+  })
+  tagline?: string[];
+
+  @ApiProperty({
     description: 'Blog excerpt or summary',
     example: 'A brief summary of this amazing travel experience...',
     required: false

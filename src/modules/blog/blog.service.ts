@@ -4,19 +4,17 @@ import { Repository } from 'typeorm';
 import { Blog } from '../../entities/blog.entity';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { CreateBlogRequestModel } from './model/create-blog-request.model';
-import { UpdateBlogRequestModel } from './model/update-blog-request.model';
 import { LoggerService } from '../../common/logger/logger.service';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog)
-    private readonly blogRepository: Repository<Blog>,
+    private readonly blogRepository: Repository<Blog>,  
     private readonly logger: LoggerService,
   ) {}
 
-  async create(createBlogRequest: CreateBlogRequestModel): Promise<Blog> {
+  async create(createBlogRequest: CreateBlogDto): Promise<Blog> {
     const startTime = Date.now();
     try {
       this.logger.info('Creating new blog', 'BlogService', { title: createBlogRequest.title });
@@ -57,7 +55,6 @@ export class BlogService {
     try {
       this.logger.info('Fetching all blogs', 'BlogService');
       const result = await this.blogRepository.find({
-        where: { active: true },
         order: { created_at: 'DESC' },
       });
       this.logger.logServiceCall('BlogService', 'findAll', Date.now() - startTime, true, { count: result.length });
@@ -74,7 +71,7 @@ export class BlogService {
     try {
       this.logger.info('Fetching blog by ID', 'BlogService', { blogId: id });
       const blog = await this.blogRepository.findOne({
-        where: { id, active: true },
+        where: { id },
       });
 
       if (!blog) {
@@ -91,28 +88,8 @@ export class BlogService {
     }
   }
 
-  async update(id: string, updateBlogRequest: UpdateBlogRequestModel): Promise<Blog> {
+  async update(id: string, updateBlogDto: UpdateBlogDto): Promise<Blog> {
     const blog = await this.findOne(id);
-
-    const updateBlogDto: UpdateBlogDto = {
-      title: updateBlogRequest.title,
-      featured_media: updateBlogRequest.featured_media,
-      hero_media: updateBlogRequest.hero_media,
-      tags: updateBlogRequest.tags,
-      excerpt: updateBlogRequest.excerpt,
-      content: updateBlogRequest.content?.map(c => ({
-        title: c.title,
-        content: c.content
-      })),
-      region: updateBlogRequest.region,
-      country: updateBlogRequest.country,
-      city: updateBlogRequest.city,
-      author_name: updateBlogRequest.author_name,
-      about_author: updateBlogRequest.about_author,
-      read_time: updateBlogRequest.read_time,
-      active: updateBlogRequest.active,
-      published_at: updateBlogRequest.published_at
-    };
 
     Object.assign(blog, updateBlogDto);
     return await this.blogRepository.save(blog);
@@ -126,21 +103,21 @@ export class BlogService {
 
   async findByRegion(region: string): Promise<Blog[]> {
     return await this.blogRepository.find({
-      where: { region, active: true },
+      where: { region },
       order: { created_at: 'DESC' },
     });
   }
 
   async findByCountry(country: string): Promise<Blog[]> {
     return await this.blogRepository.find({
-      where: { country, active: true },
+      where: { country },
       order: { created_at: 'DESC' },
     });
   }
 
   async findByCity(city: string): Promise<Blog[]> {
     return await this.blogRepository.find({
-      where: { city, active: true },
+      where: { city },
       order: { created_at: 'DESC' },
     });
   }

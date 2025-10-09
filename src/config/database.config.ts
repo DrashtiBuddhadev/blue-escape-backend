@@ -13,5 +13,9 @@ export default registerAs(
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: process.env.NODE_ENV === 'development',
     logging: process.env.NODE_ENV === 'development',
+    connectTimeout: 60000,
+    extra: {
+      connectionLimit: 10,
+    },
   }),
 );

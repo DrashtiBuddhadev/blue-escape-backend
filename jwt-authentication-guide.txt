@@ -1,0 +1,635 @@
+================================================================================
+JWT AUTHENTICATION GUIDE - BLUE ESCAPE BACKEND
+================================================================================
+
+OVERVIEW:
+This guide explains the JWT authentication system implemented for the Blue
+Escape Backend. Admin panel operations (POST, PATCH, DELETE) require
+authentication, while GET endpoints remain public for frontend access.
+
+================================================================================
+ARCHITECTURE:
+================================================================================
+
+1. USER TABLE:
+   - Table name: `users`
+   - Fields: id, username, password (bcrypt hashed), active, timestamps
+   - Default admin user created automatically on first run
+
+2. AUTHENTICATION FLOW:
+   Login → JWT Token → Protected Routes
+
+3. PROTECTED ENDPOINTS:
+   - All POST (Create) operations
+   - All PATCH (Update) operations
+   - All DELETE operations
+
+4. PUBLIC ENDPOINTS:
+   - All GET operations (no auth required)
+   - Login endpoint (POST /api/v1/auth/login)
+
+================================================================================
+ADMIN CREDENTIALS:
+================================================================================
+
+Username: admin
+Password: luxurytravelmadeeasy
+
+Note: The admin user is created automatically when the application starts
+for the first time if it doesn't exist in the database.
+
+================================================================================
+LOGIN FLOW:
+================================================================================
+
+STEP 1: LOGIN REQUEST
+----------------------
+Endpoint: POST http://localhost:3000/api/v1/auth/login
+Headers:  Content-Type: application/json
+
+Request Body:
+{
+  "username": "admin",
+  "password": "luxurytravelmadeeasy"
+}
+
+STEP 2: LOGIN RESPONSE
+----------------------
+Success Response (200 OK):
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "username": "admin",
+  "userId": "123e4567-e89b-12d3-a456-426614174000"
+}
+
+Error Response (401 Unauthorized):
+{
+  "statusCode": 401,
+  "message": "Invalid credentials",
+  "error": "Unauthorized"
+}
+
+STEP 3: STORE TOKEN
+-------------------
+Save the `access_token` in your admin panel:
+- localStorage
+- sessionStorage
+- Memory (for session-based)
+- HTTP-only cookie (most secure)
+
+Token Expiration: 24 hours
+
+================================================================================
+USING THE JWT TOKEN:
+================================================================================
+
+PROTECTED ENDPOINT REQUEST:
+---------------------------
+For any POST, PATCH, or DELETE request, include the JWT token in the
+Authorization header:
+
+Example: Create Blog Post
+POST http://localhost:3000/api/v1/blogs
+Headers:
+  Content-Type: application/json
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+Request Body:
+{
+  "title": "My Blog",
+  "content": [{"title": "Section 1", "content": "Content here"}],
+  ...
+}
+
+IMPORTANT: The format is "Bearer " + token (note the space after Bearer)
+
+================================================================================
+ADMIN PANEL INTEGRATION STEPS:
+================================================================================
+
+STEP 1: CREATE LOGIN PAGE
+--------------------------
+1. Create a login form with username and password fields
+2. On submit, call POST /api/v1/auth/login
+3. Store the access_token from the response
+4. Redirect to admin dashboard
+
+Example (JavaScript/React):
+```javascript
+async function login(username, password) {
+  const response = await fetch('http://localhost:3000/api/v1/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Login failed');
+  }
+
+  const data = await response.json();
+  // Store token
+  localStorage.setItem('authToken', data.access_token);
+  localStorage.setItem('username', data.username);
+
+  return data;
+}
+```
+
+STEP 2: CREATE AUTH CONTEXT/SERVICE
+------------------------------------
+Create a centralized service to manage authentication state:
+
+```javascript
+class AuthService {
+  constructor() {
+    this.token = localStorage.getItem('authToken');
+  }
+
+  isAuthenticated() {
+    return !!this.token;
+  }
+
+  getToken() {
+    return this.token;
+  }
+
+  setToken(token) {
+    this.token = token;
+    localStorage.setItem('authToken', token);
+  }
+
+  logout() {
+    this.token = null;
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('username');
+  }
+
+  getAuthHeaders() {
+    return {
+      'Authorization': `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    };
+  }
+}
+
+const authService = new AuthService();
+export default authService;
+```
+
+STEP 3: PROTECT ADMIN ROUTES
+-----------------------------
+Add route guards to prevent unauthorized access:
+
+```javascript
+function PrivateRoute({ children }) {
+  if (!authService.isAuthenticated()) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+}
+
+// Usage
+<Route path="/admin/*" element={
+  <PrivateRoute>
+    <AdminDashboard />
+  </PrivateRoute>
+} />
+```
+
+STEP 4: ADD TOKEN TO API REQUESTS
+----------------------------------
+Automatically include the token in all admin API calls:
+
+```javascript
+// Create API helper function
+async function apiRequest(url, method = 'GET', body = null) {
+  const options = {
+    method,
+    headers: authService.getAuthHeaders(),
+  };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(url, options);
+
+  if (response.status === 401) {
+    // Token expired or invalid
+    authService.logout();
+    window.location.href = '/login';
+    throw new Error('Authentication required');
+  }
+
+  return response.json();
+}
+
+// Usage examples
+// Create blog
+await apiRequest('http://localhost:3000/api/v1/blogs', 'POST', {
+  title: 'My Blog',
+  content: [...]
+});
+
+// Update blog
+await apiRequest('http://localhost:3000/api/v1/blogs/123', 'PATCH', {
+  title: 'Updated Title'
+});
+
+// Delete blog
+await apiRequest('http://localhost:3000/api/v1/blogs/123', 'DELETE');
+```
+
+STEP 5: HANDLE TOKEN EXPIRATION
+--------------------------------
+Tokens expire after 24 hours. Handle expiration gracefully:
+
+```javascript
+// Add interceptor to check for 401 responses
+async function apiRequestWithRetry(url, method, body) {
+  try {
+    return await apiRequest(url, method, body);
+  } catch (error) {
+    if (error.message === 'Authentication required') {
+      // Redirect to login
+      console.log('Session expired. Please login again.');
+    }
+    throw error;
+  }
+}
+```
+
+STEP 6: ADD LOGOUT FUNCTIONALITY
+---------------------------------
+```javascript
+function logout() {
+  authService.logout();
+  window.location.href = '/login';
+}
+
+// Logout button
+<button onClick={logout}>Logout</button>
+```
+
+================================================================================
+TESTING WITH POSTMAN/INSOMNIA:
+================================================================================
+
+TEST 1: LOGIN
+-------------
+1. POST http://localhost:3000/api/v1/auth/login
+2. Body (JSON):
+   {
+     "username": "admin",
+     "password": "luxurytravelmadeeasy"
+   }
+3. Send request
+4. Copy the access_token from response
+
+TEST 2: CREATE BLOG (PROTECTED)
+--------------------------------
+1. POST http://localhost:3000/api/v1/blogs
+2. Headers:
+   Authorization: Bearer YOUR_TOKEN_HERE
+   Content-Type: application/json
+3. Body (JSON):
+   {
+     "title": "Test Blog",
+     "content": [{"title": "Intro", "content": "Test content"}]
+   }
+4. Send request
+5. Should return 201 Created
+
+TEST 3: GET BLOGS (PUBLIC)
+---------------------------
+1. GET http://localhost:3000/api/v1/blogs
+2. No authorization header needed
+3. Send request
+4. Should return 200 OK with blogs list
+
+TEST 4: UPDATE BLOG (PROTECTED)
+--------------------------------
+1. PATCH http://localhost:3000/api/v1/blogs/BLOG_ID
+2. Headers:
+   Authorization: Bearer YOUR_TOKEN_HERE
+   Content-Type: application/json
+3. Body (JSON):
+   {
+     "title": "Updated Title"
+   }
+4. Send request
+5. Should return 200 OK
+
+TEST 5: DELETE BLOG (PROTECTED)
+--------------------------------
+1. DELETE http://localhost:3000/api/v1/blogs/BLOG_ID
+2. Headers:
+   Authorization: Bearer YOUR_TOKEN_HERE
+3. Send request
+4. Should return 200 OK
+
+TEST 6: TRY WITHOUT TOKEN (SHOULD FAIL)
+----------------------------------------
+1. POST http://localhost:3000/api/v1/blogs
+2. No Authorization header
+3. Send request
+4. Should return 401 Unauthorized
+
+================================================================================
+SWAGGER UI TESTING:
+================================================================================
+
+1. Start the application
+2. Open browser: http://localhost:3000/api/docs
+3. Find the "auth" section
+4. Click on "POST /api/v1/auth/login"
+5. Click "Try it out"
+6. Enter credentials:
+   {
+     "username": "admin",
+     "password": "luxurytravelmadeeasy"
+   }
+7. Click "Execute"
+8. Copy the access_token from response
+9. Click the "Authorize" button at the top of the page
+10. Enter: Bearer YOUR_TOKEN (include "Bearer " prefix)
+11. Click "Authorize"
+12. Now you can test all protected endpoints
+
+================================================================================
+COMMON ERRORS AND SOLUTIONS:
+================================================================================
+
+ERROR 1: 401 Unauthorized
+--------------------------
+Cause: Missing or invalid token
+Solution:
+- Check if Authorization header is present
+- Verify format: "Authorization: Bearer TOKEN"
+- Ensure token hasn't expired (24h validity)
+- Login again to get a new token
+
+ERROR 2: 400 Bad Request on Login
+----------------------------------
+Cause: Invalid credentials format
+Solution:
+- Ensure JSON body has "username" and "password" fields
+- Check Content-Type: application/json header
+
+ERROR 3: CORS Error
+-------------------
+Cause: Frontend and backend on different domains
+Solution:
+- Backend already has CORS enabled
+- If issue persists, check browser console for specific domain
+- May need to add specific origin in CORS config
+
+ERROR 4: Token appears in URL
+------------------------------
+Cause: Incorrect token passing
+Solution:
+- NEVER put token in URL query parameters
+- ALWAYS use Authorization header
+- Format: Authorization: Bearer TOKEN
+
+ERROR 5: Login successful but subsequent requests fail
+-------------------------------------------------------
+Cause: Token not being saved or retrieved correctly
+Solution:
+- Verify token is stored in localStorage/sessionStorage
+- Check token is being retrieved before each request
+- Ensure "Bearer " prefix is added
+
+================================================================================
+SECURITY BEST PRACTICES:
+================================================================================
+
+1. TOKEN STORAGE:
+   - Use httpOnly cookies for production (most secure)
+   - localStorage is okay for development
+   - Never store token in URL or expose in console.log
+
+2. TOKEN TRANSMISSION:
+   - Always use HTTPS in production
+   - Never send token in URL parameters
+   - Always use Authorization header
+
+3. TOKEN EXPIRATION:
+   - Default: 24 hours
+   - Implement refresh token for longer sessions (optional)
+   - Handle expiration gracefully in UI
+
+4. PASSWORD SECURITY:
+   - Default password is for initial setup only
+   - Change admin password after first login
+   - Passwords are bcrypt hashed (10 rounds)
+
+5. ENVIRONMENT VARIABLES:
+   - Set JWT_SECRET in production
+   - Default: "your-secret-key-change-in-production"
+   - Use strong, random string for JWT_SECRET
+
+================================================================================
+ENVIRONMENT CONFIGURATION:
+================================================================================
+
+Create .env file (if not exists):
+```
+# Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=blue_escape_user
+DB_PASSWORD=blue_escape_password
+DB_DATABASE=blue_escape_db
+
+# JWT
+JWT_SECRET=your-super-secret-key-change-this-in-production
+JWT_EXPIRATION=24h
+
+# App
+PORT=3000
+NODE_ENV=development
+```
+
+IMPORTANT: Change JWT_SECRET in production!
+Generate a strong secret:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+================================================================================
+API ENDPOINTS SUMMARY:
+================================================================================
+
+AUTHENTICATION:
+POST   /api/v1/auth/login              - Login (public)
+
+BLOGS:
+GET    /api/v1/blogs                   - List all blogs (public)
+GET    /api/v1/blogs/:id               - Get blog by ID (public)
+POST   /api/v1/blogs                   - Create blog (protected)
+PATCH  /api/v1/blogs/:id               - Update blog (protected)
+DELETE /api/v1/blogs/:id               - Delete blog (protected)
+
+COLLECTIONS:
+GET    /api/v1/collections             - List all collections (public)
+GET    /api/v1/collections/:id         - Get collection (public)
+POST   /api/v1/collections             - Create collection (protected)
+PATCH  /api/v1/collections/:id         - Update collection (protected)
+DELETE /api/v1/collections/:id         - Delete collection (protected)
+
+COLLECTION CONTENT:
+GET    /api/v1/collections/content/all          - List all content (public)
+GET    /api/v1/collections/content/:id          - Get content (public)
+GET    /api/v1/collections/:id/content          - Get collection content (public)
+POST   /api/v1/collections/content              - Create content (protected)
+PATCH  /api/v1/collections/content/:id          - Update content (protected)
+DELETE /api/v1/collections/content/:id          - Delete content (protected)
+
+EXPERIENCES:
+GET    /api/v1/experiences             - List all experiences (public)
+GET    /api/v1/experiences/:id         - Get experience (public)
+POST   /api/v1/experiences             - Create experience (protected)
+PATCH  /api/v1/experiences/:id         - Update experience (protected)
+DELETE /api/v1/experiences/:id         - Delete experience (protected)
+
+================================================================================
+TROUBLESHOOTING:
+================================================================================
+
+PROBLEM: Admin user not found
+SOLUTION:
+- Restart the application
+- Admin user is created automatically on startup
+- Check console for "✅ Default admin user created successfully"
+
+PROBLEM: Database connection error
+SOLUTION:
+- Ensure MySQL is running
+- Check database credentials in .env
+- Verify users table exists (run init.sql)
+
+PROBLEM: JWT secret not set
+SOLUTION:
+- Add JWT_SECRET to .env file
+- Restart the application
+- Default secret is used if not set (not recommended for production)
+
+PROBLEM: Frontend can't call protected routes
+SOLUTION:
+- Verify token is included in Authorization header
+- Check token format: "Bearer TOKEN"
+- Ensure token hasn't expired
+
+PROBLEM: Swagger "Try it out" returns 401
+SOLUTION:
+- Click "Authorize" button in Swagger UI
+- Enter token with "Bearer " prefix
+- Click "Authorize" then "Close"
+- Try the endpoint again
+
+================================================================================
+ADVANCED FEATURES (FUTURE ENHANCEMENTS):
+================================================================================
+
+1. REFRESH TOKENS:
+   - Implement refresh token mechanism for longer sessions
+   - Short-lived access tokens (15min) + long-lived refresh tokens (7 days)
+
+2. ROLE-BASED ACCESS CONTROL (RBAC):
+   - Add roles field to users table (admin, editor, viewer)
+   - Create role-based guards for different permission levels
+
+3. PASSWORD RESET:
+   - Add forgot password endpoint
+   - Email verification for password reset
+
+4. AUDIT LOG:
+   - Track who created/updated/deleted what
+   - Add created_by and updated_by fields to entities
+
+5. RATE LIMITING:
+   - Add rate limiting to login endpoint
+   - Prevent brute force attacks
+
+6. TWO-FACTOR AUTHENTICATION:
+   - Add 2FA for enhanced security
+   - TOTP or SMS-based verification
+
+================================================================================
+DATABASE SCHEMA:
+================================================================================
+
+users TABLE:
+------------
+id              CHAR(36)      PRIMARY KEY, UUID
+username        VARCHAR(255)   UNIQUE, NOT NULL
+password        VARCHAR(255)   NOT NULL (bcrypt hashed)
+active          BOOLEAN        DEFAULT TRUE
+created_at      DATETIME       DEFAULT CURRENT_TIMESTAMP
+updated_at      DATETIME       AUTO UPDATE
+
+Indexes:
+- PRIMARY KEY (id)
+- UNIQUE (username)
+- INDEX (username)
+- INDEX (active)
+
+================================================================================
+FILES CREATED/MODIFIED:
+================================================================================
+
+NEW FILES:
+- src/entities/user.entity.ts
+- src/modules/auth/auth.module.ts
+- src/modules/auth/auth.controller.ts
+- src/modules/auth/auth.service.ts
+- src/modules/auth/dto/login.dto.ts
+- src/modules/auth/strategies/jwt.strategy.ts
+- src/modules/auth/strategies/local.strategy.ts
+- src/modules/auth/guards/jwt-auth.guard.ts
+- scripts/mysql/insert_admin_user.sql
+
+MODIFIED FILES:
+- src/app.module.ts (added AuthModule)
+- src/main.ts (added Bearer auth to Swagger)
+- scripts/mysql/init.sql (added users table)
+- src/modules/blog/blog.controller.v1.ts (added guards)
+- src/modules/collection/collection.controller.v1.ts (added guards)
+- src/modules/experience/experience.controller.v1.ts (added guards)
+- package.json (added auth packages)
+
+================================================================================
+QUICK START CHECKLIST:
+================================================================================
+
+[ ] 1. Application is running
+[ ] 2. Database is initialized (users table created)
+[ ] 3. Admin user created automatically (check console)
+[ ] 4. Test login: POST /api/v1/auth/login with admin credentials
+[ ] 5. Copy access_token from response
+[ ] 6. Test protected route: POST /api/v1/blogs with Bearer token
+[ ] 7. Verify public route works without token: GET /api/v1/blogs
+[ ] 8. Integrate login in admin panel
+[ ] 9. Add Authorization header to all POST/PATCH/DELETE requests
+[ ] 10. Test token expiration handling
+
+================================================================================
+SUPPORT AND DOCUMENTATION:
+================================================================================
+
+Swagger UI: http://localhost:3000/api/docs
+API JSON:   http://localhost:3000/api/docs-json
+
+For issues or questions, refer to:
+- This guide
+- Swagger documentation
+- NestJS official docs: https://docs.nestjs.com/security/authentication
+- JWT.io for token inspection: https://jwt.io
+
+================================================================================
+END OF JWT AUTHENTICATION GUIDE
+================================================================================

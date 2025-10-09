@@ -24,6 +24,9 @@ export class CollectionContent {
   @Column({ nullable: true })
   hero_media: string;
 
+  @Column({ nullable: true })
+  featured_img: string;
+
   @Column({ type: 'text', nullable: true })
   about_collection: string;
 
@@ -31,11 +34,11 @@ export class CollectionContent {
   features: {
     title: string;
     content: string;
-    images: { media: string };
+    images: { media: string[] };
   }[];
 
   @Column('json', { nullable: true })
-  about_destination: { title: string; content: string }[];
+  about_destination: { description: string };
 
   @Column({ nullable: true })
   region: string;
@@ -45,6 +48,12 @@ export class CollectionContent {
 
   @Column({ nullable: true })
   city: string;
+
+  @Column({ nullable: true })
+  property_name: string;
+
+  @Column('json', { nullable: true })
+  tags: string[];
 
   @Column({ default: true })
   active: boolean;

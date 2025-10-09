@@ -1,0 +1,118 @@
+//experience1:
+title: THE ASIAN NARRATIVE: THE PATH TO PEACE
+excerpt: A transformative journey combining Bhutan's spiritual awakening with Rajasthan's cultural grandeur.
+best-time: October-march
+price: 450,000
+duration : 12 days
+carousel_media: https://res.cloudinary.com/dm59i8qed/image/upload/v1757648936/pexels-clement-proust-363898785-15603692_cwa8ci.jpg 
+https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80 , 
+https://images.unsplash.com/photo-1650747858910-5d48a4116296?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGJodXRhbnxlbnwwfHwwfHx8MA%3D%3D ,
+https://images.unsplash.com/photo-1547970810-dc1eac37d174?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80
+brief description:
+A journey that begins in the serene Himalayan kingdom of Bhutan and flows into the regal heart of Rajasthan, India. This dual-destination experience combines spiritual awakening with cultural grandeur, offering travelers the rare chance to balance inner peace with outer discovery. From sacred valleys and ancient monasteries to royal palaces and wellness sanctuaries, this path is designed for those seeking more than a holiday — a true transformation.
+content:
+ section title1:Your Sanctuaries
+ content1: Your sanctuaries for this journey are as exceptional as the landscapes themselves. In Bhutan, Amankora's series of lodges weave seamlessly into remote valleys, offering understated luxury amidst dramatic Himalayan peaks. Each lodge is a retreat into silence, designed for reflection, with guided treks, temple visits, and traditional Bhutanese rituals enriching your stay. In Rajasthan, Six Senses Fort Barwara welcomes you into a meticulously restored 14th-century fortress. Once the seat of royalty, today it is reimagined as a palace of wellness. Stone ramparts, candlelit courtyards, and Ayurvedic therapy rooms create a regal backdrop where history and holistic living converge.
+gallery: 
+name:Buddha Park
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758684524/cdaf9fd0-92ef-4331-b18a-2e217f07a797.png , 
+name: Monastery,Bhutan
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758684524/cdaf9fd0-92ef-4331-b18a-2e217f07a797.png, 
+name: Cultural Heritage, Bhutan 
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758685309/73f64103-4182-49c2-85af-f34a5a19cb84.pngname: Goa, India
+name: hawa Mahal, Jaipur
+url: https://plus.unsplash.com/premium_photo-1661952578770-79010299a9f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ymh1dGFufGVufDB8fDB8fHww?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80,
+name:Bahubali hills, Udaipur, Rajasthan
+url: https://res.cloudinary.com/dm59i8qed/image/upload/v1758685582/f2330cf5-8dae-499a-8f26-983cc1bee5c6.png
+featured image:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1757648936/pexels-clement-proust-363898785-15603692_cwa8ci.jpg
+your story awaits:
+Imagine a place where the air is thin, prayer flags dance in the mountain breeze, and the modern world feels a lifetime away. This is not just a vacation; it is a pilgrimage to serenity. Your story begins in Bhutan, as a guest of Amankora. Here, luxury is measured not in extravagance but in silence, clarity, and connection. You are not a tourist; you are a seeker. Each day carries you deeper into Bhutan's spiritual landscape: dawn hikes to the Tiger's Nest monastery, shared meals with Buddhist monks, meditation in ancient temples opened privately for you. With every step through pine forests and sacred valleys, you shed the noise of everyday life and rediscover balance. From this pinnacle of peace, your journey unfolds into Rajasthan — a land of royal heritage and timeless beauty. At Six Senses Fort Barwara, your awakening transforms into rejuvenation. Practice sunrise yoga on ancient ramparts overlooking the Aravalli hills, indulge in Ayurvedic therapies perfected over centuries, and savor fine dining under a canopy of stars in courtyards once walked by maharajas. Every detail is crafted to honor your body, nurture your spirit, and connect you with a regal past. This is the Path to Peace — a rare narrative where Himalayan spirituality and Indian royal wellness converge. Are you ready to walk it?
+location:
+continent/region: asia
+country: india, Bhutan
+city: rajasthan
+
+
+//experience2:
+title: ART OF REFINEMENT
+excerpt: Where culture, cuisine, and classic elegance converge
+best-time: April-June, September-December
+price: 520,000
+duration : 10 days
+carousel_media: https://images.pexels.com/photos/3756718/pexels-photo-3756718.jpeg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80 https://res.cloudinary.com/dm59i8qed/image/upload/v1757648928/pexels-srinivaspyata-21915040_gxhdot.jpg ,
+https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80 ,
+https://images.pexels.com/photos/666734/pexels-photo-666734.jpeg?ixlib=rb-4.0.3&auto=format&fit=crop&w=2980&q=80
+brief description:
+A journey that blends the sophistication of Europe's most enchanting capital with the breathtaking majesty of its alpine crown. In Paris, discover a city where history and modernity waltz together under the glow of the City of Light, before escaping into the Austrian Alps, where nature's grandeur meets impeccable refinement. This is not just travel — it is a celebration of culture, cuisine, and timeless elegance.
+content:
+ section title1:Your Sanctuaries
+ content1: Your story unfolds within two of Europe's most exquisite sanctuaries. In Paris, Le Royal Monceau – Raffles Paris stands as a living gallery and cultural epicenter. Its walls, adorned with contemporary masterpieces, and its Michelin-starred dining halls make it a beacon for art, gastronomy, and Parisian chic. Every corridor, every room, carries the pulse of a city defined by creativity and romance. In the Austrian Alps, an Oetker Collection Masterpiece Hotel awaits — a jewel of refined alpine luxury. Here, architecture harmonizes with dramatic peaks, offering both serenity and spectacle. Private mountain guides, world-class spas, and legendary wine cellars ensure every moment feels curated, while the surrounding landscapes remind you of nature's enduring artistry.
+gallery: 
+name: Eiffel Tower, Paris
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758685908/31d91cb1-c003-40ac-b57b-ddc0326d3f31.png, 
+name: Louvre Museum, Paris
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758686076/ab403a05-bca1-436a-ba28-dd33ae7b5ab5.png,
+name: Notre Dam, Paris
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758686159/b79a2880-ecf1-41ab-9dcd-e3130d3060b0.png
+name: Austrian Alps, Austria
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758686239/a2b43ed5-3b32-4b69-9380-4451fd74d09d.png,
+name: Eastern Alps, Austria
+url: https://res.cloudinary.com/dm59i8qed/image/upload/v1758686273/6d389d17-bb5a-4159-a200-5310f8bc0322.png
+featured image:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1757648928/pexels-srinivaspyata-21915040_gxhdot.jpg
+your story awaits:
+Picture yourself in a world where every detail whispers refinement. In Paris, the City of Light, your days unfold like a canvas of inspiration. At Le Royal Monceau – Raffles Paris, you are not merely a guest — you are an insider, invited into the city's beating cultural heart. Begin with a private tour of the hotel's own gallery, curated to spark conversation and creativity. Step into Montmartre's cobbled streets for a sketching session with a Parisian artist, where the spirit of Renoir and Picasso lingers in the air. As dusk falls, surrender to a Michelin-starred dining experience that balances innovation with tradition, before being whisked away to a hidden salon for a midnight dessert ritual crafted exclusively for you. In Paris, luxury is not just seen — it is felt, savored, and remembered. Then, the rhythm shifts. You trade the metropolitan symphony for the purity of the Austrian Alps. Here, your narrative becomes an alpine reverie, where days are defined by the crisp mountain air and moments of exhilarating discovery. In summer, wander through wildflower-strewn meadows on guided hikes that reveal secret valleys and panoramic vistas. In winter, carve the very first tracks on untouched powder, as if the mountain itself has reserved its beauty for you alone. Between adventures, retreat to a spa sanctuary that feels sculpted from the mountain's soul — hot stone massages, thermal baths, and sweeping views of snow-capped peaks remind you that restoration is an art. Evenings crescendo with multi-course feasts, each paired with rare vintages from a cellar steeped in history, enjoyed against a backdrop of firelight and towering alpine silhouettes. This is more than an escape — it is the Art of Refinement. Will you master it?
+tag: Where culture, cuisine, and classic elegance converge.
+location:
+continent/region: Europe
+country: France, Austria
+city: Paris, Southern Alps
+
+//experience3:
+title: THE COSTA RICAN VOLCANIC RETREAT: EDEN'S ECHO
+excerpt: Rejuvenate in the warm, healing embrace of a volcanic paradise
+best-time: January-April, December
+price: 280,000
+duration : 7 days
+carousel_media: https://res.cloudinary.com/dm59i8qed/image/upload/v1758688113/a2c895fa-459f-4afc-ad5f-7dadd9ee11c3.png
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758688064/f0dd96a7-8531-4843-aa2c-5551fbc5fe74.png ,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758688090/40ae5e74-ba03-4f88-beca-1bf51d0e21dc.png ,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758688461/665cf537-b381-4f0f-8b99-899c54259c1d.png
+brief description:
+Picture a land where the earth itself cradles you in warmth. Where the air carries the symphony of howler monkeys, and mists rise from emerald rainforests in a daily dance with the sun. This is not just a retreat — it is a journey into the living heart of nature, where sustainability, serenity, and sensuality entwine in a true Garden of Eden.
+content:
+ section title1:Your Sanctuaries
+ content1:Your narrative begins at the foot of the iconic Arenal Volcano, where Tabacon Thermal Resort & Spa becomes your sanctuary. Here, luxury does not compete with the rainforest — it breathes with it. A natural river of volcanic thermal springs flows through the resort, creating secluded lagoons and cascading waterfalls, each pool a hidden haven of warmth, wrapped in tropical greenery.
+gallery: 
+name: Way to Arenal Volcano
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758687381/9526d0fb-b46c-408b-b0b1-92d97b99aef2.png,
+name: Manuel Antonio Beach
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758688185/617615d4-90a7-4ccc-87be-8dccb58d77ec.png,
+name: Arenal Volcano(erupted)
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758687531/542f66eb-8e1a-4454-82ce-430d453a3b09.png,
+name: Monteverde cloud forest
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758688166/91b75865-74a9-45d1-83c4-e6a5ed09ba62.png
+name: Tabacon Thermal Resort & Spa
+url:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758686239/a2b43ed5-3b32-4b69-9380-4451fd74d09d.png,
+featured image:
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758687461/be9a447a-c7f4-4735-9252-9afd7bad4972.png
+your story awaits:
+By day, surrender to the rainforest's rhythm. Feel a warm waterfall soothe your shoulders while cool jungle air brushes against your skin. Retreat to your private suite, where an open-air hot tub invites you to listen to the orchestra of the wild. Adventure beckons too. Trek the volcanic slopes on a guided journey, where the raw energy of the earth hums beneath your feet. Stand in awe at La Fortuna Waterfall, its power mirrored by the pristine silence surrounding it. Later, immerse yourself in the healing embrace of local hot springs, an elemental connection to Costa Rica's geothermal soul. Evenings unfurl with candlelit feasts under a canopy of stars, the mighty Arenal silhouetted in the background, a constant reminder of nature's power and poetry. This is more than relaxation. This is rejuvenation — a sensuous dance between five-star indulgence and the untamed force of the earth. This is the call of Eden's Echo. Will you answer it?
+tag: Rejuvenate in the warm, healing embrace of a volcanic paradise.
+location:
+country: Costa Rica
+reigion: America
+city:Monteverde cloud forest

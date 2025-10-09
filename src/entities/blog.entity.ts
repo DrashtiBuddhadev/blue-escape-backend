@@ -23,6 +23,9 @@ export class Blog {
   @Column('json', { nullable: true })
   tags: string[];
 
+  @Column('json', { nullable: true })
+  tagline: string[];
+
   @Column({ type: 'text', nullable: true })
   excerpt: string;
 
