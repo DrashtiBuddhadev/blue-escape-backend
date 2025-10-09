@@ -64,6 +64,17 @@ export class CreateBlogDto {
   tags?: string[];
 
   @ApiProperty({
+    description: 'Blog taglines',
+    example: ['Explore the world', 'Adventure awaits'],
+    required: false,
+    type: [String]
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tagline?: string[];
+
+  @ApiProperty({
     description: 'Blog excerpt or summary',
     example: 'A brief summary of this amazing travel experience...',
     required: false

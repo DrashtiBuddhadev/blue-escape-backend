@@ -6,14 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiParam,
-  ApiBody
+  ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
@@ -30,6 +33,7 @@ export class CollectionController {
   constructor(private readonly collectionService: CollectionService) {}
 
   @ApiOperation({ summary: 'Create a new collection' })
+  @ApiBearerAuth()
   @ApiBody({ type: CreateCollectionRequestModel })
   @ApiResponse({
     status: 201,
@@ -37,9 +41,11 @@ export class CollectionController {
     type: CollectionResponseModel
   })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Post()
-  createCollection(@Body() createCollectionRequest: CreateCollectionRequestModel) {
-    return this.collectionService.createCollection(createCollectionRequest);
+  createCollection(@Body() createCollectionDto: CreateCollectionDto) {
+    return this.collectionService.createCollection(createCollectionDto);
   }
 
   @ApiOperation({ summary: 'Get all collections' })
@@ -67,26 +73,33 @@ export class CollectionController {
   }
 
   @ApiOperation({ summary: 'Update a collection' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Collection ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiBody({ type: UpdateCollectionDto })
   @ApiResponse({ status: 200, description: 'Collection updated successfully' })
   @ApiResponse({ status: 404, description: 'Collection not found' })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   updateCollection(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
     return this.collectionService.updateCollection(id, updateCollectionDto);
   }
 
   @ApiOperation({ summary: 'Delete a collection' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Collection ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiResponse({ status: 200, description: 'Collection deleted successfully' })
   @ApiResponse({ status: 404, description: 'Collection not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   removeCollection(@Param('id') id: string) {
     return this.collectionService.removeCollection(id);
   }
 
   @ApiOperation({ summary: 'Create collection content' })
+  @ApiBearerAuth()
   @ApiBody({ type: CreateCollectionContentRequestModel })
   @ApiResponse({
     status: 201,
@@ -94,9 +107,11 @@ export class CollectionController {
     type: CollectionContentResponseModel
   })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Post('content')
-  createCollectionContent(@Body() createContentRequest: CreateCollectionContentRequestModel) {
-    return this.collectionService.createCollectionContent(createContentRequest);
+  createCollectionContent(@Body() createContentDto: CreateCollectionContentDto) {
+    return this.collectionService.createCollectionContent(createContentDto);
   }
 
   @ApiOperation({ summary: 'Get all collection contents' })
@@ -137,20 +152,26 @@ export class CollectionController {
   }
 
   @ApiOperation({ summary: 'Update collection content' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Collection content ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiBody({ type: UpdateCollectionContentDto })
   @ApiResponse({ status: 200, description: 'Collection content updated successfully' })
   @ApiResponse({ status: 404, description: 'Collection content not found' })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Patch('content/:id')
   updateCollectionContent(@Param('id') id: string, @Body() updateContentDto: UpdateCollectionContentDto) {
     return this.collectionService.updateCollectionContent(id, updateContentDto);
   }
 
   @ApiOperation({ summary: 'Delete collection content' })
+  @ApiBearerAuth()
   @ApiParam({ name: 'id', description: 'Collection content ID', example: '123e4567-e89b-12d3-a456-426614174000' })
   @ApiResponse({ status: 200, description: 'Collection content deleted successfully' })
   @ApiResponse({ status: 404, description: 'Collection content not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @UseGuards(JwtAuthGuard)
   @Delete('content/:id')
   removeCollectionContent(@Param('id') id: string) {
     return this.collectionService.removeCollectionContent(id);

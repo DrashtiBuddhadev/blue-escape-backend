@@ -11,11 +11,14 @@ export class Experience {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  title: string;
+
   @Column({ nullable: true })
   featured_media: string;
 
-  @Column({ type: 'text', nullable: true })
-  excerpt: string;
+  @Column('json', { nullable: true })
+  taglines: string[];
 
   @Column({ nullable: true })
   country: string;
@@ -29,8 +32,8 @@ export class Experience {
   @Column('json', { nullable: true })
   best_time: { from: string; to: string }[];
 
-  @Column({ type: 'text', nullable: true })
-  carousel_media: string;
+  @Column('json', { nullable: true })
+  carousel_media: string[];
 
   @Column({ type: 'text', nullable: true })
   brief_description: string;
@@ -46,6 +49,15 @@ export class Experience {
 
   @Column({ type: 'text', nullable: true })
   story: string;
+
+  @Column({ type: 'int', nullable: true })
+  duration: number;
+
+  @Column({ type: 'int', nullable: true })
+  price: number;
+
+  @Column({ default: true })
+  active: boolean;
 
   @CreateDateColumn()
   created_at: Date;

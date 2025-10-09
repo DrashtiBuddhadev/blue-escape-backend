@@ -2,6 +2,8 @@ import {
   IsString,
   IsOptional,
   IsArray,
+  IsNumber,
+  IsBoolean,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -73,13 +75,15 @@ export class CreateExperienceDto {
   featured_media?: string;
 
   @ApiProperty({
-    description: 'Experience excerpt',
-    example: 'Discover the pristine beauty of Phi Phi Islands',
-    required: false
+    description: 'Experience taglines',
+    example: ['Discover the pristine beauty of Phi Phi Islands', 'An unforgettable island adventure'],
+    required: false,
+    type: [String]
   })
   @IsOptional()
-  @IsString()
-  excerpt?: string;
+  @IsArray()
+  @IsString({ each: true })
+  taglines?: string[];
 
   @ApiProperty({
     description: 'Country',
@@ -120,13 +124,15 @@ export class CreateExperienceDto {
   best_time?: BestTimeDto[];
 
   @ApiProperty({
-    description: 'Carousel media URL',
-    example: 'https://example.com/carousel.jpg',
-    required: false
+    description: 'Carousel media URLs',
+    example: ['https://example.com/carousel1.jpg', 'https://example.com/carousel2.jpg'],
+    required: false,
+    type: [String]
   })
   @IsOptional()
-  @IsString()
-  carousel_media?: string;
+  @IsArray()
+  @IsString({ each: true })
+  carousel_media?: string[];
 
   @ApiProperty({
     description: 'Brief description of the experience',
@@ -178,4 +184,32 @@ export class CreateExperienceDto {
   @IsOptional()
   @IsString()
   story?: string;
+
+  @ApiProperty({
+    description: 'Experience duration in days',
+    example: 3,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  duration?: number;
+
+  @ApiProperty({
+    description: 'Experience price in INR',
+    example: 24999,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+
+  @ApiProperty({
+    description: 'Whether the experience is active/published',
+    example: true,
+    required: false,
+    default: true
+  })
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
 }

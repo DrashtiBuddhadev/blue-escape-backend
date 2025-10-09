@@ -1,0 +1,104 @@
+collection name: Six Senses
+location:
+city: Jaipur
+country: India
+region:Asia
+featured_img : https://www.aman.com/sites/default/files/styles/li…25-02/amankora_bhutan_-_thimphu.jpg?itok=6VZJPM7U
+collection content:
+hero_media: https://res.cloudinary.com/dm59i8qed/video/upload/v1758102563/sixsenses_w0es5i.mp4
+about_collection:
+Operating from a meticulously restored 14th-century fort. Offers transformative wellness programs (yoga, detox) within a majestic historical setting, blending royal history with holistic healing. This Rajasthan resort is a royal palace of well-being. A beautiful 14th-century fort sensitively converted to become a Six Senses sanctuary of well-being. Originally owned by a Rajasthani Royal Family, it faces the Chauth ka Barwara Mandir temple. The significant conservation effort incorporates two palaces and two temples within the walled fort. The design of Six Senses resort in Rajasthan reinterprets the gracious and regal ambiance of a bygone era dating back 700 years.
+features:[
+{
+title:wellness
+images:[
+https://media.sixsenses.com/B60H3R33/at/54hkvj24q7pscv3qwgksvtx/Herb_Garden_Visit_with_Chef_.jpg?format=webp&width=1023&height=639&fit=crop,
+https://media.sixsenses.com/B60H3R33/at/b4gtxxw4gq79s45j4v6g5z6w/Six-Senses-Yoga-is-524398542.jpg?format=webp&width=790&height=987&fit=crop
+]
+content:A Royal Retreat of Well-Being at Six Senses Spa in Rajasthan. The 30,000 sq. ft. / 2,800 sq. m. Six Senses Spa and fitness center is located within the original women's palace and both temples. Our spa in Rajasthan offers an extensive Ayurvedic "whole body" healing system, meditation, and personalized wellness programs based on the preventative principles of Eastern medicine and result-oriented Western influences. We use our own signature range of indigenous essential oils, muds, clays, gels, and vegetable oils, all lovingly blended for their therapeutic energy.
+},
+{
+title:dining
+images:[
+https://media.sixsenses.com/B60H3R33/at/28qmj3kfttf6xbh3wg8fb/1_The_Cortile_interior.jpg?format=webp&width=790&height=790&fit=crop,
+https://media.sixsenses.com/B60H3R33/at/gg7n4cw9qqsn55nqpzvwgn/1_The_Rajawat_Room.jpg?format=webp&width=790&height=790&fit=crop,
+https://media.sixsenses.com/B60H3R33/at/tjjfg3tfj4nrhr96nhf5m79v/Restaurant_Rani_Bagh.jpg?format=webp&width=790&height=790&fit=crop
+]
+content:Their chefs at Six Senses Fort Barwara offer a creative approach to their menus. Their Rajasthan restaurants combine the best of regional Rajasthani and pan-Indian cuisine with a sprinkling of international influences while embracing the Eat With Six Senses philosophy of local, fresh and seasonal produce. Where possible, they harvest ingredients from the resort's organic gardens and carefully selected farmers from the villages and townships nearby.
+},
+{
+title:Accommodations
+images:[
+https://media.sixsenses.com/B60H3R33/at/4mp7cxx9v6j49j8vm75cc7s/1_Sanctuary_Suite_living_room.jpg?format=webp&width=648&height=405&fit=crop,
+https://media.sixsenses.com/B60H3R33/at/b6q768qvqncg976pwv9fnw/4_Raja_Man_Singh_Pool_Suite_Living_Room.jpg?format=webp&width=669&height=891&fit=crop,
+https://media.sixsenses.com/B60H3R33/at/hb35b58f73682nc6kmsw5b7v/1_Terrace_Hot_Tub_Suite.jpg?format=webp&width=648&height=405&fit=crop
+]
+content:The 48 suites ranging from 753 square feet (70 square meters) to 3,014 square feet (280 square meters) embrace the heritage of our 700-year-old fort, which means each is uniquely beautiful and varies in size and layout depending on their setting. The East Wing overlooks the countryside, and the West Wing offers views of Barwara village and beyond. While visuals are for reference only, each suite is designed in contemporary Rajasthani style, reinterpreting the fort's rich history while subtly incorporating state-of-the-art technology, handmade mattresses, cotton bedding, and all the fundamentals for a good night's sleep.
+}
+]
+about_destination:
+Jaipur, the Pink City, is a dazzling blend of regal splendor, vibrant culture, and timeless charm that embodies the heart of Rajasthan. The rose-hued facades of its old city, bathed in golden sunlight, whisper tales of a glorious Rajput past. Standing tall is the majestic Hawa Mahal, its latticed windows once designed for royal women to watch processions unseen, while the grand City Palace and Jantar Mantar showcase both opulence and scientific brilliance. The imposing Amber Fort, perched on rugged hills, glows like a golden crown at dusk, reflecting Jaipur’s warrior spirit and artistic finesse.
+Beyond its monuments, Jaipur enchants with bustling bazaars overflowing with hand-block prints, gemstone jewelry, and vibrant crafts, each stall a kaleidoscope of color and tradition. The flavors of authentic Rajasthani thalis, spiced with warmth and hospitality, invite travelers to savor the city’s culinary heritage. From elephant rides up ancient fort ramps to evenings filled with folk performances under starlit skies, Jaipur is more than a destination—it is a living, breathing tapestry of history, culture, and celebration.
+
+
+
+collection name: Amankora
+location:
+city: Paro,trimph,Punakha, Gangtey and Bumthang
+country: Bhutan
+region:Asia
+featured_img:https://media.sixsenses.com/B60H3R33/at/jfwr7xksns…or.jpeg?format=webp&width=669&height=891&fit=crop,
+collection content:
+hero_media: https://player.vimeo.com/video/1091948135?autoplay=1&muted=1&loop=1&background=1
+about_collection:
+Across five valleys, five lodges immerse guests in the country's authentic spirit through an abundance of wellness, adventure and cultural experiences. Guided by compassionate hosts, Amankora offers an unrivalled journey to spiritual renewal and self-enlightenment in this legendary Kingdom. A circuit of five lodges across Bhutan offering a journey through the country's spiritual heartland, with private meditation, temple visits, and immersive cultural tours in the Himalayan mountains.
+features:[
+{
+title:Amankora Paro
+images:[
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758891077/70771588-0624-4c85-a3e2-79988259e7af.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758891057/52949972-a968-41d1-a9bb-fc921f96f2e4.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758891020/285ae318-b4c6-42ab-88f8-61022db00436.png
+]
+content:At 2,250 metres (7,382 feet), Paro Valley offers a captivating start or end to an Amankora journey. Hidden in pine forests, its 24 suites blend rustic charm with contemporary flair, featuring king-size beds, wood-burning stoves, terrazzo-clad bathtubs and banquette window seats. Hiking and cycling are amongst the best ways to explore the surrounding landscape, with an exhaustive list of options and routes.
+
+},
+{
+title:Amankora Thimphu
+images:[
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890937/8d13ff4d-68f4-4e64-981c-2b62f74b50f8.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890886/48e3bba4-59bd-4213-9b29-02939a7c8337.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890916/46194447-d1f3-4086-8a97-03c84e38a30b.png
+]
+content:Perched in a secluded pine forest overlooking Bhutan's capital, Amankora Thimphu offers 16 suites blending traditional dzong-style architecture with contemporary design. Within easy reach of Thimphu's vibrant city centre, explore its cultural landmarks, including the Buddha Dordenma Monument, museums and textile factories. Private and peaceful, the lodge provides an authentic experience amid Bhutan's natural beauty, featuring king-size beds, wood-burning stoves and elegant bathrooms with terrazzo bathtubs.
+},
+{
+title:Amankora Punakha
+images:[
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890630/34b91305-1962-48bd-beec-e7e088a057cc.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890735/2614680f-d339-46be-accb-19c695fed9a4.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890780/679ae86e-50a4-4188-b535-a6cc4f9d085c.png
+]
+content:A converted farmhouse built by a former Je Khenpo (chief abbot) dating back 300 years, Punakha Lodge is located in a subtropical valley that produces most of the nation's vegetables and where Bhutanese royals spend their winters. The Lodge has twelve suites, including two Mo Chhu Suites which feature spacious living areas and can be combined to offer two bedrooms. All suites offer king-size beds, traditional wood-burning stoves, window-seats and bathrooms with terrazzo bathtubs and twin vanities.
+},
+{
+title:Amankora Gangtey
+images:[
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890521/80ad566e-46c0-485c-850f-82d57525fc07.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890416/49afc487-eecf-4ef5-8cd3-e194e9433a74.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890433/44a1789d-ca31-44e8-9de9-f4fd3651f9ea.png
+]
+content:Resting in the serene Phobjikha Valley, Gangtey Lodge offers an immersive rural experience with scenic views of the valley floor and the 16th-century Gangtey Goemba monastery. Its eight suites are identical to those of Thimphu Lodge, featuring king-size beds, wood-burning stoves and terrazzo bathrooms, with views across the valley. Surrounded by farmlands, the lodge provides direct access to hiking and biking trails.
+},
+{
+title:Amankora Bumthang
+images:[
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890229/6567fde0-384e-4022-86e6-33c2f30237aa.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890201/27739c00-47e8-4f5e-aadb-8e98fcf3d50c.png,
+https://res.cloudinary.com/dm59i8qed/image/upload/v1758890174/54b983ef-fe58-4db9-b4d5-d7885a459d7a.png
+]
+content:Bumthang, meaning 'beautiful field,' is home to 29 temples and monasteries, including the ancient Jambay Lhakhang, and is a treasure-trove of Bhutan's art and painting tradition. Amankora's Bumthang Lodge, with its 16 suites lies adjacent to Wandichholing Palace, within the town of Jakar. Enjoy cultural and spiritual experiences, including the memorable 108-butter lamp offering at Jambay Lhakhang. Suites feature king-size beds, wood-burning stoves, window seats and bathrooms with terrazzo-clad bathtubs and twin vanities.
+}
+]
+about_destination:
+Bhutan is a global pioneer. The first nation of the world to measure its success not by the strength of its economy but by the happiness of its people. Such a unique approach befits a country unlike any other – a wild, spiritual and majestic mountain kingdom where tranquillity reigns. Whether travellers visit in the height of summer, when the Himalayas are carpeted with wildflowers, or the depths of winter, when cobalt skies segue into spectacular starscapes, Bhutan is a year-round revelation.

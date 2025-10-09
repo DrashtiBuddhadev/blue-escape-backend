@@ -11,13 +11,12 @@ services:
       MYSQL_DATABASE: blue_escape_db
       MYSQL_USER: blue_escape_user
       MYSQL_PASSWORD: blue_escape_password
-    command: --host-cache-size=0
+    command: --default-authentication-plugin=mysql_native_password --host-cache-size=0 --wait_timeout=600 --interactive_timeout=600 --max_connections=200
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./scripts/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-      - ./scripts/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro,Z
     networks:
       - blue-escape-network
     healthcheck:
@@ -61,11 +60,10 @@ services:
       interval: 30s
       start_period: 60s
 
-  # phpMyAdmin for database management (optional)
+  # phpMyAdmin for database management
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: blue-escape-phpmyadmin
-    restart: unless-stopped
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -73,6 +71,10 @@ services:
       PMA_PASSWORD: blue_escape_password
       MYSQL_ROOT_PASSWORD: root_password
       APACHE_SERVER_NAME: localhost
+      UPLOAD_LIMIT: 300M
+      ACQUIRE_TIMEOUT: 60000
+      MEMORY_LIMIT: 512M
+      MAX_EXECUTION_TIME: 300
     ports:
       - "8080:80"
     networks:

@@ -64,7 +64,6 @@ export class CollectionService {
 
   async findAllCollectionContents(): Promise<CollectionContent[]> {
     return await this.collectionContentRepository.find({
-      where: { active: true },
       relations: ['collection'],
       order: { created_at: 'DESC' },
     });
@@ -72,7 +71,7 @@ export class CollectionService {
 
   async findOneCollectionContent(id: string): Promise<CollectionContent> {
     const content = await this.collectionContentRepository.findOne({
-      where: { id, active: true },
+      where: { id },
       relations: ['collection'],
     });
 
@@ -97,7 +96,7 @@ export class CollectionService {
 
   async findContentsByCollection(collectionId: string): Promise<CollectionContent[]> {
     return await this.collectionContentRepository.find({
-      where: { collection_id: collectionId, active: true },
+      where: { collection_id: collectionId },
       relations: ['collection'],
       order: { created_at: 'DESC' },
     });

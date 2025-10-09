@@ -35,8 +35,21 @@ async function bootstrap() {
     .setDescription('Complete API documentation for Blue Escape Backend - use /api/docs-json for admin panel integration')
     .setVersion('1.0')
     .addServer(`http://localhost:${process.env.PORT || 3000}`, 'Development')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
+    .addTag('auth', 'Authentication endpoints')
     .addTag('blogs', 'Blog management endpoints')
     .addTag('collections', 'Collection management endpoints')
+    .addTag('contact', 'Contact inquiry endpoints')
     .addTag('experiences', 'Experience management endpoints')
     .addTag('health', 'Health check endpoints')
     .build();
@@ -53,7 +66,7 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+  await app.listen(port, 'localhost');
   console.log(`Application is running on: http://localhost:${port}`);
   console.log(`Swagger UI available at: http://localhost:${port}/api/docs`);
   console.log(`API JSON for admin panel: http://localhost:${port}/api/docs-json`);
