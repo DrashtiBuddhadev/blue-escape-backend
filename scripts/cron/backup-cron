@@ -1,0 +1,6 @@
+# Run database backup every day at 2 AM
+# Format: minute hour day month weekday command
+0 2 * * * /scripts/backup-db.sh >> /var/log/cron.log 2>&1
+
+# Empty line required at end of cron file
+

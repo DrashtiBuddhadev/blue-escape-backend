@@ -5,6 +5,7 @@ import { Experience } from '../../entities/experience.entity';
 import { CreateExperienceDto } from './dto/create-experience.dto';
 import { UpdateExperienceDto } from './dto/update-experience.dto';
 import { LoggerService } from '../../common/logger/logger.service';
+import { PaginatedResponseDto } from '../../common/dto/paginated-response.dto';
 
 @Injectable()
 export class ExperienceService {
@@ -29,10 +30,21 @@ export class ExperienceService {
     }
   }
 
-  async findAll(): Promise<Experience[]> {
-    return await this.experienceRepository.find({
-      order: { created_at: 'DESC' },
-    });
+  async findAll(page: number = 1, limit: number = 10, region?: string): Promise<PaginatedResponseDto<Experience>> {
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.experienceRepository
+      .createQueryBuilder('experience')
+      .orderBy('experience.created_at', 'DESC')
+      .skip(skip)
+      .take(limit);
+
+    if (region) {
+      queryBuilder.andWhere('experience.region = :region', { region });
+    }
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
   async findOne(id: string): Promise<Experience> {
@@ -58,32 +70,48 @@ export class ExperienceService {
     await this.experienceRepository.remove(experience);
   }
 
-  async findByRegion(region: string): Promise<Experience[]> {
-    return await this.experienceRepository.find({
+  async findByRegion(region: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Experience>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.experienceRepository.findAndCount({
       where: { region },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
-  async findByCountry(country: string): Promise<Experience[]> {
-    return await this.experienceRepository.find({
+  async findByCountry(country: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Experience>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.experienceRepository.findAndCount({
       where: { country },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
-  async findByCity(city: string): Promise<Experience[]> {
-    return await this.experienceRepository.find({
+  async findByCity(city: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Experience>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.experienceRepository.findAndCount({
       where: { city },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
-  async findByTag(tag: string): Promise<Experience[]> {
-    return await this.experienceRepository
+  async findByTag(tag: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Experience>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.experienceRepository
       .createQueryBuilder('experience')
       .where('JSON_CONTAINS(experience.tags, :tag)', { tag: `"${tag}"` })
       .orderBy('experience.created_at', 'DESC')
-      .getMany();
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 }

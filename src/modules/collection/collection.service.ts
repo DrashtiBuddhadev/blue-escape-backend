@@ -7,6 +7,7 @@ import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { CreateCollectionContentDto } from './dto/create-collection-content.dto';
 import { UpdateCollectionContentDto } from './dto/update-collection-content.dto';
+import { PaginatedResponseDto } from '../../common/dto/paginated-response.dto';
 
 @Injectable()
 export class CollectionService {
@@ -22,11 +23,55 @@ export class CollectionService {
     return await this.collectionRepository.save(collection);
   }
 
-  async findAllCollections(): Promise<Collection[]> {
-    return await this.collectionRepository.find({
-      relations: ['contents'],
-      order: { created_at: 'DESC' },
-    });
+  async findAllCollections(
+    page: number = 1,
+    limit: number = 10,
+    region?: string,
+    country?: string,
+    city?: string,
+    tags?: string[],
+  ): Promise<PaginatedResponseDto<Collection>> {
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.collectionRepository
+      .createQueryBuilder('collection')
+      .leftJoinAndSelect('collection.contents', 'contents')
+      .orderBy('collection.created_at', 'DESC');
+
+    // Apply location and tags filters if provided
+    if (region || country || city || (tags && tags.length > 0)) {
+      queryBuilder.where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('cc.collection_id')
+          .from('collection_contents', 'cc')
+          .where('cc.active = :active', { active: true });
+
+        if (region) {
+          subQuery.andWhere('cc.region = :region', { region });
+        }
+        if (country) {
+          subQuery.andWhere('cc.country = :country', { country });
+        }
+        if (city) {
+          subQuery.andWhere('cc.city = :city', { city });
+        }
+        if (tags && tags.length > 0) {
+          tags.forEach((tag, index) => {
+            subQuery.andWhere(`JSON_CONTAINS(cc.tags, :tag${index})`, {
+              [`tag${index}`]: `"${tag}"`,
+            });
+          });
+        }
+
+        return 'collection.id IN ' + subQuery.getQuery();
+      });
+    }
+
+    queryBuilder.skip(skip).take(limit);
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
   async findOneCollection(id: string): Promise<Collection> {
@@ -62,11 +107,46 @@ export class CollectionService {
     return await this.collectionContentRepository.save(content);
   }
 
-  async findAllCollectionContents(): Promise<CollectionContent[]> {
-    return await this.collectionContentRepository.find({
-      relations: ['collection'],
-      order: { created_at: 'DESC' },
-    });
+  async findAllCollectionContents(
+    page: number = 1,
+    limit: number = 10,
+    region?: string,
+    country?: string,
+    city?: string,
+    tags?: string[],
+  ): Promise<PaginatedResponseDto<CollectionContent>> {
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.collectionContentRepository
+      .createQueryBuilder('content')
+      .leftJoinAndSelect('content.collection', 'collection')
+      .where('content.active = :active', { active: true })
+      .orderBy('content.created_at', 'DESC')
+      .skip(skip)
+      .take(limit);
+
+    if (region) {
+      queryBuilder.andWhere('content.region = :region', { region });
+    }
+
+    if (country) {
+      queryBuilder.andWhere('content.country = :country', { country });
+    }
+
+    if (city) {
+      queryBuilder.andWhere('content.city = :city', { city });
+    }
+
+    if (tags && tags.length > 0) {
+      tags.forEach((tag, index) => {
+        queryBuilder.andWhere(`JSON_CONTAINS(content.tags, :tag${index})`, {
+          [`tag${index}`]: `"${tag}"`,
+        });
+      });
+    }
+
+    const [result, total] = await queryBuilder.getManyAndCount();
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
   async findOneCollectionContent(id: string): Promise<CollectionContent> {
@@ -100,5 +180,25 @@ export class CollectionService {
       relations: ['collection'],
       order: { created_at: 'DESC' },
     });
+  }
+
+  async getAvailableLocations(): Promise<{ regions: string[]; countries: string[]; cities: string[] }> {
+    const results = await this.collectionContentRepository
+      .createQueryBuilder('content')
+      .select('content.region', 'region')
+      .addSelect('content.country', 'country')
+      .addSelect('content.city', 'city')
+      .where('content.active = :active', { active: true })
+      .getRawMany();
+
+    const regions = [...new Set(results.map(r => r.region).filter(Boolean))];
+    const countries = [...new Set(results.map(r => r.country).filter(Boolean))];
+    const cities = [...new Set(results.map(r => r.city).filter(Boolean))];
+
+    return {
+      regions: regions.sort(),
+      countries: countries.sort(),
+      cities: cities.sort(),
+    };
   }
 }

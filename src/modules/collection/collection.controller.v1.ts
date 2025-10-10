@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -15,6 +16,7 @@ import {
   ApiParam,
   ApiBody,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CollectionService } from './collection.service';
@@ -26,6 +28,8 @@ import { CreateCollectionRequestModel } from './model/create-collection-request.
 import { CreateCollectionContentRequestModel } from './model/create-collection-content-request.model';
 import { CollectionResponseModel } from './model/collection-response.model';
 import { CollectionContentResponseModel } from './model/collection-content-response.model';
+import { LocationFilterDto } from '../../common/dto/location-filter.dto';
+import { CollectionContentFilterDto } from './dto/collection-content-filter.dto';
 
 @ApiTags('collections')
 @Controller({ path: 'collections', version: '1' })
@@ -48,15 +52,34 @@ export class CollectionController {
     return this.collectionService.createCollection(createCollectionDto);
   }
 
-  @ApiOperation({ summary: 'Get all collections' })
+  @ApiOperation({ summary: 'Get available location filters' })
+  @ApiResponse({
+    status: 200,
+    description: 'Available location filters retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        regions: { type: 'array', items: { type: 'string' }, example: ['Asia', 'Europe'] },
+        countries: { type: 'array', items: { type: 'string' }, example: ['Thailand', 'France'] },
+        cities: { type: 'array', items: { type: 'string' }, example: ['Bangkok', 'Paris'] },
+      },
+    },
+  })
+  @Get('locations/filters')
+  getAvailableLocations() {
+    return this.collectionService.getAvailableLocations();
+  }
+
+  @ApiOperation({ summary: 'Get all collections with pagination' })
   @ApiResponse({
     status: 200,
     description: 'List of collections retrieved successfully',
     type: [CollectionResponseModel]
   })
   @Get()
-  findAllCollections() {
-    return this.collectionService.findAllCollections();
+  findAllCollections(@Query() filters: CollectionContentFilterDto) {
+    const { page = 1, limit = 10, region, country, city, tags } = filters;
+    return this.collectionService.findAllCollections(page, limit, region, country, city, tags);
   }
 
   @ApiOperation({ summary: 'Get a specific collection by ID' })
@@ -121,8 +144,9 @@ export class CollectionController {
     type: [CollectionContentResponseModel]
   })
   @Get('content/all')
-  findAllCollectionContents() {
-    return this.collectionService.findAllCollectionContents();
+  findAllCollectionContents(@Query() filters: CollectionContentFilterDto) {
+    const { page = 1, limit = 10, region, country, city, tags } = filters;
+    return this.collectionService.findAllCollectionContents(page, limit, region, country, city, tags);
   }
 
   @ApiOperation({ summary: 'Get specific collection content by ID' })

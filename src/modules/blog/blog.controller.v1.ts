@@ -25,6 +25,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { CreateBlogRequestModel } from './model/create-blog-request.model';
 import { UpdateBlogRequestModel } from './model/update-blog-request.model';
 import { BlogResponseModel } from './model/blog-response.model';
+import { LocationFilterDto } from '../../common/dto/location-filter.dto';
 
 @ApiTags('blogs')
 @Controller({ path: 'blogs', version: '1' })
@@ -47,27 +48,16 @@ export class BlogController {
     return this.blogService.create(createBlogRequest);
   }
 
-  @ApiOperation({ summary: 'Get all blog posts with optional filtering' })
-  @ApiQuery({ name: 'region', required: false, description: 'Filter by region', example: 'Asia' })
-  @ApiQuery({ name: 'country', required: false, description: 'Filter by country', example: 'Thailand' })
-  @ApiQuery({ name: 'city', required: false, description: 'Filter by city', example: 'Bangkok' })
+  @ApiOperation({ summary: 'Get all blog posts with optional filtering and pagination' })
   @ApiResponse({
     status: 200,
     description: 'List of blog posts retrieved successfully',
     type: [BlogResponseModel]
   })
   @Get()
-  findAll(@Query('region') region?: string, @Query('country') country?: string, @Query('city') city?: string) {
-    if (region) {
-      return this.blogService.findByRegion(region);
-    }
-    if (country) {
-      return this.blogService.findByCountry(country);
-    }
-    if (city) {
-      return this.blogService.findByCity(city);
-    }
-    return this.blogService.findAll();
+  findAll(@Query() filters: LocationFilterDto) {
+    const { page = 1, limit = 10, region } = filters;
+    return this.blogService.findAll(page, limit, region);
   }
 
   @ApiOperation({ summary: 'Get a specific blog post by ID' })
