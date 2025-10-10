@@ -5,6 +5,7 @@ import { Blog } from '../../entities/blog.entity';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { LoggerService } from '../../common/logger/logger.service';
+import { PaginatedResponseDto } from '../../common/dto/paginated-response.dto';
 
 @Injectable()
 export class BlogService {
@@ -50,15 +51,26 @@ export class BlogService {
     }
   }
 
-  async findAll(): Promise<Blog[]> {
+  async findAll(page: number = 1, limit: number = 10, region?: string): Promise<PaginatedResponseDto<Blog>> {
     const startTime = Date.now();
     try {
-      this.logger.info('Fetching all blogs', 'BlogService');
-      const result = await this.blogRepository.find({
+      this.logger.info('Fetching all blogs', 'BlogService', { page, limit, region });
+      const skip = (page - 1) * limit;
+
+      const whereCondition: any = {};
+      if (region) {
+        whereCondition.region = region;
+      }
+
+      const [result, total] = await this.blogRepository.findAndCount({
+        where: whereCondition,
         order: { created_at: 'DESC' },
+        skip,
+        take: limit,
       });
-      this.logger.logServiceCall('BlogService', 'findAll', Date.now() - startTime, true, { count: result.length });
-      return result;
+
+      this.logger.logServiceCall('BlogService', 'findAll', Date.now() - startTime, true, { count: result.length, total });
+      return new PaginatedResponseDto(result, total, page, limit);
     } catch (error) {
       this.logger.logError(error, 'BlogService.findAll');
       this.logger.logServiceCall('BlogService', 'findAll', Date.now() - startTime, false);
@@ -101,24 +113,36 @@ export class BlogService {
     await this.blogRepository.save(blog);
   }
 
-  async findByRegion(region: string): Promise<Blog[]> {
-    return await this.blogRepository.find({
+  async findByRegion(region: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Blog>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.blogRepository.findAndCount({
       where: { region },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
-  async findByCountry(country: string): Promise<Blog[]> {
-    return await this.blogRepository.find({
+  async findByCountry(country: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Blog>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.blogRepository.findAndCount({
       where: { country },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 
-  async findByCity(city: string): Promise<Blog[]> {
-    return await this.blogRepository.find({
+  async findByCity(city: string, page: number = 1, limit: number = 10): Promise<PaginatedResponseDto<Blog>> {
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.blogRepository.findAndCount({
       where: { city },
       order: { created_at: 'DESC' },
+      skip,
+      take: limit,
     });
+    return new PaginatedResponseDto(result, total, page, limit);
   }
 }

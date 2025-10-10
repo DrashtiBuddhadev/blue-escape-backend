@@ -1,0 +1,101 @@
+# Production Docker Compose Configuration
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: blue-escape-mysql-prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --max_connections=200
+      --innodb_buffer_pool_size=256M
+      --query_cache_size=0
+      --query_cache_type=0
+      --innodb_log_file_size=128M
+      --wait_timeout=600
+      --interactive_timeout=600
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - mysql_backups:/backups
+    networks:
+      - blue-escape-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root_password}"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 40s
+
+  # NestJS Application Service (Production)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: blue-escape-backend:production
+    container_name: blue-escape-app-prod
+    restart: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DB_HOST: mysql
+    ports:
+      - "${PORT:-3000}:3000"
+    networks:
+      - blue-escape-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/v1/health"]
+      timeout: 10s
+      retries: 5
+      interval: 30s
+      start_period: 60s
+
+  # Automated Database Backup Service
+  backup:
+    image: mysql:8.0
+    container_name: blue-escape-backup
+    restart: always
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+    volumes:
+      - mysql_backups:/backups
+      - ./scripts/backup-db.sh:/scripts/backup-db.sh:ro
+      - ./scripts/cron/backup-cron:/etc/cron.d/backup-cron:ro
+    networks:
+      - blue-escape-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: >
+      sh -c "apt-get update && 
+             apt-get install -y cron &&
+             chmod 0644 /etc/cron.d/backup-cron &&
+             crontab /etc/cron.d/backup-cron &&
+             chmod +x /scripts/backup-db.sh &&
+             cron && tail -f /var/log/cron.log"
+
+volumes:
+  mysql_data:
+    driver: local
+  mysql_backups:
+    driver: local
+
+networks:
+  blue-escape-network:
+    driver: bridge
+

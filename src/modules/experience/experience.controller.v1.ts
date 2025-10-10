@@ -25,6 +25,7 @@ import { UpdateExperienceDto } from './dto/update-experience.dto';
 import { CreateExperienceRequestModel } from './model/create-experience-request.model';
 import { UpdateExperienceRequestModel } from './model/update-experience-request.model';
 import { ExperienceResponseModel } from './model/experience-response.model';
+import { LocationFilterDto } from '../../common/dto/location-filter.dto';
 
 @ApiTags('experiences')
 @Controller({ path: 'experiences', version: '1' })
@@ -47,36 +48,16 @@ export class ExperienceController {
     return this.experienceService.create(createExperienceRequest);
   }
 
-  @ApiOperation({ summary: 'Get all experiences with optional filtering' })
-  @ApiQuery({ name: 'region', required: false, description: 'Filter by region', example: 'Asia' })
-  @ApiQuery({ name: 'country', required: false, description: 'Filter by country', example: 'Thailand' })
-  @ApiQuery({ name: 'city', required: false, description: 'Filter by city', example: 'Krabi' })
-  @ApiQuery({ name: 'tag', required: false, description: 'Filter by tag', example: 'adventure' })
+  @ApiOperation({ summary: 'Get all experiences with optional filtering and pagination' })
   @ApiResponse({
     status: 200,
     description: 'List of experiences retrieved successfully',
     type: [ExperienceResponseModel]
   })
   @Get()
-  findAll(
-    @Query('region') region?: string,
-    @Query('country') country?: string,
-    @Query('city') city?: string,
-    @Query('tag') tag?: string,
-  ) {
-    if (region) {
-      return this.experienceService.findByRegion(region);
-    }
-    if (country) {
-      return this.experienceService.findByCountry(country);
-    }
-    if (city) {
-      return this.experienceService.findByCity(city);
-    }
-    if (tag) {
-      return this.experienceService.findByTag(tag);
-    }
-    return this.experienceService.findAll();
+  findAll(@Query() filters: LocationFilterDto) {
+    const { page = 1, limit = 10, region } = filters;
+    return this.experienceService.findAll(page, limit, region);
   }
 
   @ApiOperation({ summary: 'Get a specific experience by ID' })

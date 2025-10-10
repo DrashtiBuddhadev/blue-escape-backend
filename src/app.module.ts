@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -22,6 +23,16 @@ import loggerConfig from './config/logger.config';
       isGlobal: true,
       load: [databaseConfig, loggerConfig],
     }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          ttl: parseInt(config.get('THROTTLE_TTL') || '60', 10) * 1000,
+          limit: parseInt(config.get('THROTTLE_LIMIT') || '10', 10),
+        },
+      ],
+    }),
     LoggerModule,
     DatabaseModule,
     AuthModule,
@@ -38,6 +49,10 @@ import loggerConfig from './config/logger.config';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
