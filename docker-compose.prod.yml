@@ -74,7 +74,7 @@ services:
     volumes:
       - mysql_backups:/backups
       - ./scripts/backup-db.sh:/scripts/backup-db.sh:ro
-      - ./scripts/cron/backup-cron:/etc/cron.d/backup-cron:ro
+      - ./scripts/cron/backup-cron:/backup-cron:ro
     networks:
       - blue-escape-network
     depends_on:
@@ -83,6 +83,7 @@ services:
     command: >
       sh -c "apt-get update &&
              apt-get install -y mysql-client cron &&
+             cp /backup-cron /etc/cron.d/backup-cron &&
              chmod 0644 /etc/cron.d/backup-cron &&
              crontab /etc/cron.d/backup-cron &&
              chmod +x /scripts/backup-db.sh &&
