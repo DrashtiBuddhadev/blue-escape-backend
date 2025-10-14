@@ -20,16 +20,20 @@ async function bootstrap() {
   }));
 
   // CORS Configuration
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3001', 'http://localhost:5173'];
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').map(o => o.trim()) || ['http://localhost:3001', 'http://localhost:5173'];
+  console.log('Allowed CORS origins:', allowedOrigins);
+
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, postman)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+        console.log(`CORS: Allowed origin: ${origin}`);
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        console.log(`CORS: Rejected origin: ${origin}`);
+        callback(null, false);
       }
     },
     credentials: true,
