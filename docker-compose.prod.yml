@@ -86,7 +86,6 @@ services:
              cp /backup-cron /etc/cron.d/backup-cron &&
              chmod 0644 /etc/cron.d/backup-cron &&
              crontab /etc/cron.d/backup-cron &&
-             chmod +x /scripts/backup-db.sh &&
              cron -f"
 
 volumes:
