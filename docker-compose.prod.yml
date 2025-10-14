@@ -61,7 +61,7 @@ services:
 
   # Automated Database Backup Service
   backup:
-    image: mysql:8.0
+    image: ubuntu:22.04
     container_name: blue-escape-backup
     restart: always
     env_file:
@@ -70,6 +70,7 @@ services:
       DB_HOST: mysql
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
       BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+      DEBIAN_FRONTEND: noninteractive
     volumes:
       - mysql_backups:/backups
       - ./scripts/backup-db.sh:/scripts/backup-db.sh:ro
@@ -80,11 +81,12 @@ services:
       mysql:
         condition: service_healthy
     command: >
-      sh -c "microdnf install -y cronie &&
+      sh -c "apt-get update &&
+             apt-get install -y mysql-client cron &&
              chmod 0644 /etc/cron.d/backup-cron &&
              crontab /etc/cron.d/backup-cron &&
              chmod +x /scripts/backup-db.sh &&
-             crond && tail -f /var/log/cron.log"
+             cron -f"
 
 volumes:
   mysql_data:
