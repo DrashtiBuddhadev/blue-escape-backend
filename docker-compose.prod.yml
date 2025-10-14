@@ -16,8 +16,6 @@ services:
       --default-authentication-plugin=mysql_native_password
       --max_connections=200
       --innodb_buffer_pool_size=256M
-      --query_cache_size=0
-      --query_cache_type=0
       --innodb_log_file_size=128M
       --wait_timeout=600
       --interactive_timeout=600
@@ -82,12 +80,11 @@ services:
       mysql:
         condition: service_healthy
     command: >
-      sh -c "apt-get update && 
-             apt-get install -y cron &&
+      sh -c "microdnf install -y cronie &&
              chmod 0644 /etc/cron.d/backup-cron &&
              crontab /etc/cron.d/backup-cron &&
              chmod +x /scripts/backup-db.sh &&
-             cron && tail -f /var/log/cron.log"
+             crond && tail -f /var/log/cron.log"
 
 volumes:
   mysql_data:
