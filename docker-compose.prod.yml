@@ -88,6 +88,25 @@ services:
              crontab /etc/cron.d/backup-cron &&
              cron -f"
 
+  # phpMyAdmin for Database Management
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: blue-escape-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+      UPLOAD_LIMIT: 50M
+    ports:
+      - "8080:80"
+    networks:
+      - blue-escape-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
 volumes:
   mysql_data:
     driver: local
