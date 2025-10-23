@@ -53,6 +53,8 @@ export class CollectionController {
   }
 
   @ApiOperation({ summary: 'Get available location filters' })
+  @ApiQuery({ name: 'region', required: false, description: 'Filter countries and cities by region' })
+  @ApiQuery({ name: 'country', required: false, description: 'Filter cities by country' })
   @ApiResponse({
     status: 200,
     description: 'Available location filters retrieved successfully',
@@ -66,8 +68,8 @@ export class CollectionController {
     },
   })
   @Get('locations/filters')
-  getAvailableLocations() {
-    return this.collectionService.getAvailableLocations();
+  getAvailableLocations(@Query('region') region?: string, @Query('country') country?: string) {
+    return this.collectionService.getAvailableLocations(region, country);
   }
 
   @ApiOperation({ summary: 'Get all collections with pagination' })

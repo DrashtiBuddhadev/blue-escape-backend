@@ -182,14 +182,26 @@ export class CollectionService {
     });
   }
 
-  async getAvailableLocations(): Promise<{ regions: string[]; countries: string[]; cities: string[] }> {
-    const results = await this.collectionContentRepository
+  async getAvailableLocations(
+    region?: string,
+    country?: string,
+  ): Promise<{ regions: string[]; countries: string[]; cities: string[] }> {
+    const queryBuilder = this.collectionContentRepository
       .createQueryBuilder('content')
       .select('content.region', 'region')
       .addSelect('content.country', 'country')
       .addSelect('content.city', 'city')
-      .where('content.active = :active', { active: true })
-      .getRawMany();
+      .where('content.active = :active', { active: true });
+
+    // Apply filters if provided
+    if (region) {
+      queryBuilder.andWhere('content.region = :region', { region });
+    }
+    if (country) {
+      queryBuilder.andWhere('content.country = :country', { country });
+    }
+
+    const results = await queryBuilder.getRawMany();
 
     const regions = [...new Set(results.map(r => r.region).filter(Boolean))];
     const countries = [...new Set(results.map(r => r.country).filter(Boolean))];
